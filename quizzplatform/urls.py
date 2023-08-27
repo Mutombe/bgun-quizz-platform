@@ -16,12 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls.static import static
-from django.urls import path
+from django.urls import path, include
 from quizz.views import homepage
 from quizzplatform import settings
 
 urlpatterns = [
     path('', homepage, name='home'),
+    #path('accounts/', include('allauth.urls')),
+    path('', include('authentication.urls')),
     path('admin/', admin.site.urls),
 ]
 

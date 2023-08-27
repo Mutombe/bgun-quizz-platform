@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body style="background: #EDEDED;">
+        <section class="vh-100" style="background-color: #eee;">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-90">
+                <div class="col col-md-9 col-lg-7 col-xl-5">
+                  <div class="card" style="border-radius: 15px; background-color: coral">
+                    <div class="card-body p-4 text-black">
+                      <div>
+                        <h6 data-mdb-toggle="tooltip" title="Today's motto" class="mb-4">In the quest for making an informed and content africa</h6>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                          <p class="small mb-0"><i class="far fa-clock me-2"></i>3 hrs</p>
+                          <p  class="fw-bold mb-0" data-mdb-toggle="tooltip" title="Your Quizz Score"><strong>Score</strong> 90</p>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center mb-4">
+                        <div class="flex-shrink-0">
+                          <img src="{% static 'files/BGUN.png' %}"
+                            alt="Generic placeholder image" class="img-fluid rounded-circle border border-dark border-3"
+                            style="width: 70px;">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          <div class="d-flex flex-row align-items-center mb-2">
+                            <p data-mdb-toggle="tooltip" title="Your username" class="mb-0 me-2">@{{request.user}}</p>
+                            <ul class="mb-0 list-unstyled d-flex flex-row" style="color: #3c2f2f;">
+                              <li>
+                                <i class="fas fa-star fa-xs"></i>
+                              </li>
+                              <li>
+                                <i class="fas fa-star fa-xs"></i>
+                              </li>
+                              <li>
+                                <i class="fas fa-star fa-xs"></i>
+                              </li>
+                              <li>
+                                <i class="fas fa-star fa-xs"></i>
+                              </li>
+                              <li>
+                                <i class="fas fa-star fa-xs"></i>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <button type="button" class="btn btn-outline-dark btn-rounded btn-sm"
+                              data-mdb-ripple-color="dark">Saved Quizz</button>
+                            <button type="button" class="btn btn-outline-dark btn-rounded btn-sm"
+                              data-mdb-ripple-color="dark">Liked Quizz</button>
+                            <button data-mdb-toggle="tooltip" title="See your comments" type="button" class="btn btn-outline-dark btn-floating btn-sm"
+                              data-mdb-ripple-color="dark">
+                              <svg data-mdb-toggle="tooltip" title="Your comments" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"/>
+                            </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <p class="my-4 pb-1" data-mdb-toggle="tooltip" title="Number of your comments">52 comments</p>
+                      <a href="{% url 'home' %}"><button type="button" style="color: #6f5e4e;"class="btn btn-rounded btn-block btn-lg"><i
+                          class="far fa-clock me-2"></i>
+                          <strong>Play with Quizz</strong>
+                        </button></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </body>
+{% endblock %}

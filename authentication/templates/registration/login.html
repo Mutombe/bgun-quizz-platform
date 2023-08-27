@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    input#id_password {
+        margin: 2px;
+    }
+    p#register {
+        padding-top: 5px;
+    }
+</style>
+
+<div class="container">
+  <div class="text-center my-4">
+    <img src="{% static 'files/BGUN.png' %}" alt="Logo" width="100">
+  </div>
+  <h2 class="text-center">Login</h2>
+
+  <form method="POST" class="text-center my-4">
+    {% csrf_token %}
+      <div class="form-group">
+        <label for="id_username"></label>
+        <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" placeholder="Username" maxlength="150" required="" id="id_username" autocompleted="">
+      </div>
+      <div class="form-group">
+        <label for="id_password"></label>
+        <input type="password" name="password" autocomplete="current-password" placeholder="Username" required="" id="id_password" autocompleted="">
+      </div>
+    <hr>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <a href="{% url 'register' %}"><p id='register'>Don't have an account ?</p></a>
+  </form>
+
+</div>
+{% endblock %}
