@@ -22,7 +22,7 @@
       },
       {
         "src": "/(.*)",
-        "dest": "/home.html"
+        "dest": "quizzplatform/wsgi.py"
       }
     ]
   }
