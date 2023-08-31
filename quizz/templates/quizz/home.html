@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <style>
+
     div {
         display: grid;
         align-content: center;
@@ -52,7 +53,203 @@
     }
 
 
+
+    .text-area {
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto;
+        word-wrap: break-word;
+        width: inherit;
+        height: 76px;
+        flex-shrink: 1;
+        background: #FFF;
+        margin-right: -30px;
+    }
+
+    .comments {
+        max-width: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        word-wrap: break-word;
+        display: flex;
+        background: #D9D9D9;
+        height: 92px;
+        border-radius: 9px;
+        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+
+    .inneritems {
+        width: 58px;
+        height: 20px;
+        background: darkgray;
+        margin-top: -15px;
+        border-radius: 4px;
+    }
+
+    .rating {
+        display: flex;
+        width: 90px;
+        height: 29px;
+        margin-top: -12px;
+        flex-shrink: 0;
+        border-radius: 4px;
+        background: darkgrey;
+    }
+
+    .number{
+        color: #000;
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal; 
+    }
+
+    .arrow{
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    .text{
+        color: #000;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-top: 5px;
+        margin-left: 10px;
+
+
+    }
+
+    .comment-icon{
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    .date {
+        color: #000;
+        margin-top: 12px;
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .first {
+        display: flex;
+    }
+
+    .second {
+        display: flex;
+    }
+
+    p.number {
+        background: aliceblue;
+        margin-top: 5px;
+        border-radius: 3px;
+        padding-inline: 4px;
+        margin-bottom: 11px;
+    }
+
+    p#\31 number {
+        margin-left: 4px;
+        border-radius: 3px;
+    }
+
+    .tab {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .comment-add-section {
+        width: 654px;
+        display: flex;
+        margin-left: 47px;
+        height: 281px;
+        margin-top: 8px;
+        flex-shrink: 1;
+        border-radius: 10px;
+        background: #D9D9D9;
+    }
+
+    .comment-add-icon {
+        width: 38px;
+        margin-top: 2px;
+        margin-right: 10px;
+        margin-left: -4px;
+        height: 34px;
+        flex-shrink: 0;
+    }
+
+    .comment-section {
+        width: 654px;
+        margin-left: 45px;
+    }
+
+    textarea#comment {
+        width: 593px;
+        height: 225px;
+        flex-shrink: 0;
+    }
+
+    form.comment-form {
+        margin-top: -15px;
+        margin-right: -4px;
+    }
+
+    button.btn.btn-primary {
+        width: 591px;
+        height: 28.821px;
+        flex-shrink: 0;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+
     @media (max-width: 986px) {
+        
+        textarea#comment {
+            width: 240px;
+            height: 150px;
+            flex-shrink: 0;
+        }
+
+        p.text {
+            padding-right: 10px;
+            padding-top: 30px;
+        }
+
+
+        button.btn.btn-primary {
+            width: 237px;
+            height: 28.821px;
+            flex-shrink: 0;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        .comment-add-section {
+            width: 300px;
+            display: flex;
+            padding-top: 10px;
+            height: 200px;
+            margin-left: 179px;
+            flex-shrink: 1;
+            border-radius: 10px;
+            background: #D9D9D9;
+        }
+
+        .comment-section {
+            padding-bottom: 10px;
+            margin-left: 2px;
+        }
+
         .answers{
             display: flex;
             width: 300px;
@@ -69,7 +266,6 @@
             font-style: normal;
             font-weight: 500;
             line-height: normal;
-            margin-top: 20px;
             margin-left: 10px;
         }
 
@@ -84,6 +280,10 @@
         }
 
         .text-area {
+            max-width: 100%;
+            max-height: 100%;
+            overflow: auto;
+            word-wrap: break-word;
             width: 308px;
             height: 106px;
             flex-shrink: 0;
@@ -91,120 +291,10 @@
             margin-right: -30px;
         }
 
-        p.text {
-            padding-right: 30px;
-        }
-
-        
     }
-
-    .text-area {
-        width: inherit;
-        height: 76px;
-        flex-shrink: 1;
-        background: #FFF;
-        margin-right: -30px;
-    }
-
-    .comments {
-        display: flex;
-        width: inherit;
-        background: #D9D9D9;
-        height: 92px;
-        border-radius: 9px;
-        justify-content: center;
-        justify-items: center;
-        align-items: center;
-        flex-shrink: 0;
-    }
-
-.inneritems {
-    width: 58px;
-    height: 29px;
-    background: darkgray;
-    margin-top: -15px;
-    border-radius: 5px;
-
-}
-
-.rating {
-    display: flex;
-    width: 90px;
-    height: 29px;
-    margin-top: -12px;
-    flex-shrink: 0;
-    border-radius: 4px;
-    background: darkgrey;
-}
-
-.number{
-    color: #000;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal; 
-}
-
-.arrow{
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-}
-
-.text{
-    color: #000;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    margin-top: 5px;
-    margin-left: 10px;
-
-
-}
-
-
-.comment-icon{
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-}
-
-.date{
-    color: #000;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
-
-.first {
-    display: flex;
-}
-.second {
-    display: flex;
-}
-
-p.number {
-    background: aliceblue;
-    margin-top: 5px;
-    padding-inline: 4px;
-    margin-bottom: 11px;
-}
-
-p#\31 number {
-    margin-left: 4px;
-}
-
-.tab {
-    display: flex;
-    justify-content: space-between;
-}
-
-
 
 </style>
-<body class="body">
+    <body class="body">
     <h2 class="text-center"></h2>
 
     <div class="container">
@@ -217,8 +307,7 @@ p#\31 number {
             <img src="{% static 'files/BGUN.png' %}" alt="Logo">
         </div>
         <div class="answers">
-            <p id="answer1">
-                Answer 1</p>
+            <p id="answer1">Answer 1</p>
             <p id="answer1">Answer 2</p>
             <p id="answer1">Answer 3</p>
             <p id="answer1">Answer 4</p>
@@ -229,90 +318,54 @@ p#\31 number {
         <div class="comments">   
             <div class="text-area">    
                 <p class="text">
-                <svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                    <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"/>
-                </svg>
-                    I like your questions, they are quite intriguing. I would love meet you in person for lunch so that we can talk.......</P> 
+                    <svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                        <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"/>
+                    </svg>
+                    I like your questions, they are quite intriguing. I would love meet you in person for lunch so that we can talk.......
+                </p> 
             </div>   
         </div>
         <div class="tab">
         <div class="rating">
             <div class="first">
                 <p id="1number" class="number">44</p>
-                <svg xmlns="http://www.w3.org/2000/svg" class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 20V4M12 4L18 10M12 4L6 10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 20V4M12 4L18 10M12 4L6 10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
             </div>
             <div class="second">
                 <p class="number">45</p>
-                <svg xmlns="http://www.w3.org/2000/svg" class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 20V4M12 4L18 10M12 4L6 10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                    <path d="M12 1V17M12 17L18 11M12 17L6 11" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
         </div>
-            <div class="inneritems"> 
-                <p class="date">Date#Time</p>
-            </div>         
-        </div>
-        </div>
+        <div class="inneritems"> 
+            <p class="date">Date#Time</p>
+        </div>         
+    </div>
+</div>
+
+    <div class="comment-add-section">  
+        <div class="comment-add-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="34" viewBox="0 0 38 34" fill="none">
+                <path d="M3.16669 17C3.16669 10.3218 3.16669 6.98265 5.48543 4.908C7.80416 2.83333 11.5361 2.83333 19 2.83333C26.4639 2.83333 30.1959 2.83333 32.5146 4.908C34.8334 6.98265 34.8334 10.3218 34.8334 17C34.8334 23.6782 34.8334 27.0174 32.5146 29.092C30.1959 31.1667 26.4639 31.1667 19 31.1667C11.5361 31.1667 7.80416 31.1667 5.48543 29.092C3.16669 27.0174 3.16669 23.6782 3.16669 17Z" stroke="#1C274C" stroke-width="1.5"/>
+                <path d="M23.75 17H19M19 17H14.25M19 17V12.75M19 17V21.25" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>   
+        <div class="text-add">
             <form method="POST" class="comment-form">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="comment">Leave a comment:</label>
-                    <textarea name="comment" id="comment" rows="4" required></textarea>
+                    <textarea name="comment" id="comment" placeholder="Leave a comment" rows="4" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="button">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <div class="comment-section">   
-        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-            <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"/>
-        </svg>
-        
-        <div class="comments">
-            <div class="inneritems"> 
-                <svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                    <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"/>
-                </svg>
-                <p class="date">Date#Time</p>
-            </div>   
-
-           
-            <div class="text-area">    
-                <p class="text">I like your questions, they are quite intriguing. I would love meet you in person for lunch so that we can talk.......</P> 
-            </div>   
-
-
-
-        </div>
-        <div class="rating">
-            <div class="first">
-                <p id="1number" class="number">44</p>
-                <svg xmlns="http://www.w3.org/2000/svg" class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 20V4M12 4L18 10M12 4L6 10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <div class="second">
-                <p class="number">45</p>
-                <svg xmlns="http://www.w3.org/2000/svg" class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 20V4M12 4L18 10M12 4L6 10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-        </div>
-        
-        <div>
-            <form method="POST" class="comment-form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="comment">Leave a comment:</label>
-                    <textarea name="comment" id="comment" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-    </div>
-
+<br>
     </body>
 {% endblock  %}
