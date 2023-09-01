@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .quiz {
+            margin-bottom: 30px;
+        }
+        
+        .quiz-question {
+            font-weight: bold;
+        }
+        
+        .quiz-answer {
+            margin-bottom: 10px;
+        }
+        
+        .comments {
+            margin-top: 30px;
+        }
+        
+        .comment {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        
+        #comment-input {
+            width: 100%;
+            resize: none;
+        }
+        
+        .comment-info {
+            margin-bottom: 5px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="text-center">Quiz and Comment Section</h1>
+                
+                <div class="quiz">
+                    <h2>Quiz</h2>
+                    <div class="quiz-question">
+                        <p>Question 1: What is the capital of France?</p>
+                        <p>Question 1:</p>
+                        <img src="path/to/question1-image.jpg" alt="Question 1">
+                    </div>
+                    <div class="quiz-answer">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q1" value="a" id="q1-a">
+                            <label class="form-check-label" for="q1-a">
+                                Paris
+                            </label>
+                        </div>
+                    </div>
+                    <div class="quiz-answer">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q1" value="b" id="q1-b">
+                            <label class="form-check-label" for="q1-b">
+                                Rome
+                            </label>
+                        </div>
+                    </div>
+                    <div class="quiz-answer">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q1" value="c" id="q1-c">
+                            <label class="form-check-label" for="q1-c">
+                                Madrid
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comments">
+                    <h2>Comments</h2>
+                    <div id="comment-section">
+                        <!-- Comments will be dynamically added here -->
+                    </div>
+                    
+                    <form id="comment-form">
+                        <div class="form-group">
+                            <label for="comment-input">Add a comment:</label>
+                            <textarea class="form-control" id="comment-input" rows="4" placeholder="Enter your comment..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Bootstrap JS (Optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('comment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var commentInput = document.getElementById('comment-input');
+            var commentText = commentInput.value.trim();
+            
+            if (commentText !== '') {
+                var comment = document.createElement('div');
+                comment.className = 'comment';
+                
+                var info = document.createElement('div');
+                info.className = 'comment-info';
+                info.textContent = 'Posted by User on ' + new Date().toLocaleString();
+                
+                var text = document.createElement('div');
+                text.className = 'comment-text';
+                text.textContent = commentText;
+                
+                comment.appendChild(info);
+                comment.appendChild(text);
+                
+                document.getElementById('comment-section').appendChild(comment);
+                
+                commentInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock  %}
