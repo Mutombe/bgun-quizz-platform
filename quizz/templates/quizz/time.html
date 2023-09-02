@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>African Quiz App - Time Categories</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom styles */
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .page-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .category-card {
+      max-width: 400px;
+      margin: 0 auto 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      transition: transform 0.3s;
+    }
+    .category-card:hover {
+      transform: scale(1.05);
+    }
+    .category-card h5 {
+      margin-bottom: 10px;
+    }
+    .category-card p {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-heading">
+      <h2>Time Considerate Quiz Categories</h2>
+      <p>Select a time category that suits your available free time</p>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="category-card">
+          <h5>Short</h5>
+          <p>Quiz suitable for short breaks</p>
+          <a href="{% url 'category_questions' category.id %}?time=short" class="btn btn-primary">Start Quiz</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card">
+          <h5>Medium</h5>
+          <p>Quiz suitable for moderate free time</p>
+          <a href="{% url 'category_questions' category.id %}?time=medium" class="btn btn-primary">Start Quiz</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card">
+          <h5>Long</h5>
+          <p>Quiz suitable for longer periods of free time</p>
+          <a href="{% url 'category_questions' category.id %}?time=long" class="btn btn-primary">Start Quiz</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+
+<style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    .page-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .category-card {
+      max-width: 400px;
+      margin: 0 auto 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      transition: transform 0.3s;
+    }
+
+    .category-card:hover {
+      transform: scale(1.05);
+    }
+
+    .category-card h5 {
+      margin-bottom: 10px;
+    }
+
+    .category-card p {
+      margin-bottom: 20px;
+    }
+
+    .btn-brown {
+      background-color: #793535;
+    }
+    
+    .btn-brown:hover {
+      background-color: white;
+      color: black;
+    }
+
+    .btn-brown-dark {
+      background-color: #552a2a;
+    }
+
+    .btn-brown-dark:hover {
+      background-color: white;
+      color: black;
+    }
+
+    .btn-brown-darker {
+      background-color: #3d1e1e;
+    }
+
+    .btn-brown-darker:hover {
+    background-color: white;
+    color: black;
+  }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-heading">
+      <h2>{{ category.name }}</h2>
+      <h2>Time Considerate Quiz Categories</h2>
+      <p>Select a time category that suits your available free time</p>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="category-card">
+          <h5>Short <strong>(10)</strong></h5>
+          <p>Quiz suitable for short breaks</p>
+          <a href="{% url 'short_category_questions' category.id %}?time=short" class="btn btn-primary btn-brown">Start Quiz</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card">
+          <h5>Medium <strong>(50)</strong></h5>
+          <p>Quiz suitable for moderate free time</p>
+          <a href="{% url 'medium_category_questions' category.id %}?time=medium" class="btn btn-primary btn-brown-dark">Start Quiz</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card">
+          <h5>Long <strong>(100)</strong></h5>
+          <p>Quiz suitable for longer periods of free time</p>
+          <a href="{% url 'long_category_questions' category.id %}?time=long" class="btn btn-primary btn-brown-darker">Start Quiz</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock  %}

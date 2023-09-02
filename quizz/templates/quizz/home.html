@@ -15,7 +15,7 @@
         }
         
         header {
-            background-color: #333;
+            background-color: #793535;
             padding: 20px;
             color: #fff;
             text-align: center;
@@ -61,6 +61,11 @@
         .cta-button:hover {
             background-color: #555;
         }
+
+        .link {
+            text-decoration: none;
+            color: #793535;
+        }
     </style>
 </head>
 <body>
@@ -79,24 +84,30 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="car">
-                    <img src="https://good-nature-blog-uploads.s3.amazonaws.com/uploads/2022/02/Elephants-in-Moremi-National-Park-Botswana--1280x640.jpg" alt="Car 1">
-                    <h2>Wildlife Adventure</h2>
-                    <p>Embark on an immersive journey to explore Africa's breathtaking wildlife and natural wonders. Test your knowledge about iconic animals, national parks, and conservation efforts.</p>
+                    <a class="link" href="{% url 'category_detail' category_id=3 %}" style="text-decoration: none; color: #793535;">
+                        <img src="https://good-nature-blog-uploads.s3.amazonaws.com/uploads/2022/02/Elephants-in-Moremi-National-Park-Botswana--1280x640.jpg" alt="Car 1">
+                        <h2>Wildlife Adventure</h2>
+                        <p>Embark on an immersive journey to explore Africa's breathtaking wildlife and natural wonders. Test your knowledge about iconic animals, national parks, and conservation efforts.</p>
+                    </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="car">
-                    <img src="https://i.ytimg.com/vi/TTFh6E4RFps/maxresdefault.jpg" alt="Car 2">
-                    <h2>Cultural Expedition</h2>
-                    <p>Dive into the vibrant tapestry of African cultures, traditions, and history. Uncover fascinating stories, art, music, and landmarks that shape the diverse heritage of Africa.</p>
+                    <a class="link" href="{% url 'category_detail' category_id=4 %}" style="text-decoration: none; color: #793535;">
+                        <img src="https://i.ytimg.com/vi/TTFh6E4RFps/maxresdefault.jpg" alt="Car 2">
+                        <h2>Cultural Expedition</h2>
+                        <p>Dive into the vibrant tapestry of African cultures, traditions, and history. Uncover fascinating stories, art, music, and landmarks that shape the diverse heritage of Africa.</p>
+                    </a>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="car">
-                    <img src="https://theafricanhistory.com/wp-content/uploads/2022/03/D1EE0EF3-F454-440B-B71F-0457651D2B56-scaled.jpeg" alt="Car 3">
-                    <h2>Historical Facts</h2>
-                    <p>Discover the rich history of Africa, from ancient civilizations to modern events. Test your knowledge about significant historical figures, events, and landmarks.</p>
+                    <a class="link" href="{% url 'category_detail' category_id=5 %}" style="text-decoration: none; color: #793535;">
+                        <img src="https://theafricanhistory.com/wp-content/uploads/2022/03/D1EE0EF3-F454-440B-B71F-0457651D2B56-scaled.jpeg" alt="Car 3">
+                        <h2>Historical Facts</h2>
+                        <p>Discover the rich history of Africa, from ancient civilizations to modern events. Test your knowledge about significant historical figures, events, and landmarks.</p>
+                    </a>
                 </div>
             </div>
         </div>
@@ -104,23 +115,29 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="car">
-                    <img src="https://www.lifeberrys.com/img/article/natural-wonders-of-africa-1624987791-lb.jpg" alt="Car 4">
-                    <h2>Natural Wonders</h2>
-                    <p>Explore Africa's stunning natural wonders, including majestic mountains, breathtaking waterfalls, and unique landscapes. Test your knowledge about these incredible phenomena.</p>
+                    <a class="link" href="{% url 'category_detail' category_id=6 %}" style="text-decoration: none; color: #793535;">
+                        <img src="https://www.lifeberrys.com/img/article/natural-wonders-of-africa-1624987791-lb.jpg" alt="Car 4">
+                        <h2>Natural Wonders</h2>
+                        <p>Explore Africa's stunning natural wonders, including majestic mountains, breathtaking waterfalls, and unique landscapes. Test your knowledge about these incredible phenomena.</p>
+                    </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="car">
-                    <img src="https://globalcastaway.com/wp-content/uploads/2020/09/travel-bucket-list-egypt.jpg" alt="Car 5">
-                    <h2>Famous Landmarks</h2>
-                    <p>Uncover Africa's most famous landmarks and architectural marvels. Test your knowledge about iconic structures that have become symbols ofthe continent.</p>
+                    <a class="link" href="{% url 'category_detail' category_id=7 %}" style="text-decoration: none; color: #793535;">
+                        <img src="https://globalcastaway.com/wp-content/uploads/2020/09/travel-bucket-list-egypt.jpg" alt="Car 5">
+                        <h2>Famous Landmarks</h2>
+                        <p>Uncover Africa's most famous landmarks and architectural marvels. Test your knowledge about iconic structures that have become symbols of the continent.</p>
+                    </a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="car">
-                    <img src="https://www.traveldrafts.com/wp-content/uploads/2022/07/Virunga-National-Park-Natural-Wonders-in-Africa.jpg" alt="Car 6">
-                    <h2>Geographical Wonders</h2>
-                    <p>Marvel at the diverse geography of Africa, from vast deserts to lush rainforests. Test your knowledge about the unique geographical features of the continent.</p>
+                    <a class="link" href="{% url 'category_detail' category_id=8 %}" style="text-decoration: none; color: #793535;">
+                        <img src="https://www.traveldrafts.com/wp-content/uploads/2022/07/Virunga-National-Park-Natural-Wonders-in-Africa.jpg" alt="Car 6">
+                        <h2>Geographical Wonders</h2>
+                        <p>Marvel at the diverse geography of Africa, from vast deserts to lush rainforests. Test your knowledge about the unique geographical features of the continent.</p>
+                    </a>
                 </div>
             </div>
         </div>

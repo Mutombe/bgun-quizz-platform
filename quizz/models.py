@@ -1,8 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class TimeCategory(models.Model):
+    name = models.CharField(max_length=100)
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(null=True)
+
 
 class Question(models.Model):
     image = models.ImageField(upload_to="static/files", blank=True)
