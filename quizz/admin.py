@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Answer, Category, Comment
+from .models import Question, Answer, Category, Comment, QuizProgress
 
 
 class AdminCategoriesOverview(admin.ModelAdmin):
@@ -15,7 +15,7 @@ class AdminQuestionsOverview(admin.ModelAdmin):
     list_filter = ("category",)
     
 class AdminAnswersOverview(admin.ModelAdmin):
-    list_display = ("question","is_correct", "answer_text1", "answer_text2", "answer_text3")
+    list_display = ("is_correct", "answer_text", "question")
     search_fields = ("is_correct", 'question')
     ordering = ("question",)
     list_filter = ("is_correct",)
@@ -25,9 +25,17 @@ class AdminCommentsOverview(admin.ModelAdmin):
     search_fields = ("question", 'comment_text')
     ordering = ("created_at",)
     list_filter = ("question",)
+    
+class AdminProgressOverview(admin.ModelAdmin):
+    list_display = ("user","category","time_category", "score")
+    search_fields = ("category", 'time_category')
+    ordering = ("score",)
+    list_filter = ("time_category", 'category')
+    
 
 
 admin.site.register(Category, AdminCategoriesOverview)
 admin.site.register(Question, AdminQuestionsOverview)
 admin.site.register(Answer, AdminAnswersOverview)
 admin.site.register(Comment, AdminCommentsOverview)
+admin.site.register(QuizProgress, AdminProgressOverview)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Category, Question
+from .models import Category, Question,QuizProgress, TimeCategory
 
 
 def homepage(request):
@@ -35,7 +35,33 @@ def long_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
     questions = Question.objects.filter(category=category).order_by('?')[:100]
     return render(request, 'quizz/long.html', {'category': category, 'questions': questions})
+
+def submit_answer(request, category_id, time_category, question_id):
+    if request.method == 'POST':
+        selected_option_id = request.POST.get('selected_option')
+        question = Question.objects.get(id=question_id)
+        selected_option = question.answer_set.get(id=selected_option_id)
+        
+        if selected_option.is_correct:
+            # Retrieve or create the quiz progress for the user
+            quiz_progress, created = QuizProgress.objects.get_or_create(user=request.user, category=question.category, time_category=time_category)
+            quiz_progress.score += 1
+            quiz_progress.save()
+
+        return redirect('next_question', category_id=category_id, time_category=time_category, question_id=question_id)
     
+def quiz_summary(request, category_id, time_category):
+    category = Category.objects.get(id=category_id)
+    time_category = TimeCategory.objects.get(name=time_category)
+    total_questions = Question.objects.filter(category=category, time_category=time_category).count()
+    score = request.session.get('score', 0)
+
+    # Clear the session data to start a new quiz
+    request.session.flush()
+
+    # Render the template for quiz summary and pass the necessary context data
+    return render(request, 'quiz_summary.html', {'category': category, 'time_category': time_category, 'total_questions': total_questions, 'score': score})
+
 def quiz_view(request, category_id):
     category = Category.objects.get(id=category_id)
     questions = Question.objects.filter(category=category)
