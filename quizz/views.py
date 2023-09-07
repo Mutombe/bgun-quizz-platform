@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Category, Question,QuizProgress, TimeCategory
+from .models import Category, Comment, Question,QuizProgress, TimeCategory
+from django.http import HttpResponseNotAllowed
+from django.db.models import Value, IntegerField
+from django.core.paginator import Paginator
+from datetime import datetime
 
 
 def homepage(request):
@@ -20,11 +24,42 @@ def category_questions(request, category_id):
         'time_category': time_category,
     }
     return render(request, 'quizz/category_detail.html', context)
-    
+
+
 def short_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
     questions = Question.objects.filter(category=category).order_by('?')[:10]
-    return render(request, 'quizz/shorts.html', {'category': category, 'questions': questions})
+    total_questions = questions.count()
+    paginator = Paginator(questions, 1)  
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    if request.method == 'POST':
+        for question in page_obj:
+            selected_option_id = request.POST.get('selected_option')
+            if selected_option_id in question.answer_set.values_list('id', flat=True):
+                selected_option = question.answer_set.get(id=selected_option_id)
+                
+                if selected_option.is_correct:
+                    quiz_progress, created = QuizProgress.objects.get_or_create(user=request.user, category=category, time_category=time_category)
+                    quiz_progress.score += 1
+                    
+                    
+                    
+                next_index = page_obj.index(question) + 1
+                if next_index < len(questions):
+                    next_question = questions[next_index]
+                else: 
+                    next_index = None
+                if next_question:
+                    return redirect('short_category_questions', category_id=category_id,  page=next_question.number)
+                else:
+                    quiz_progress.finish_time = datetime.now()
+                    quiz_progress.save()
+                    return redirect('quiz_summary', category_id=category_id, time_category='short')
+
+    return render(request, 'quizz/shorts.html', {'category': category, 'questions': questions, 'total_questions': total_questions, 'page_obj': page_obj})
 
 def medium_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
@@ -36,62 +71,29 @@ def long_category_questions(request, category_id):
     questions = Question.objects.filter(category=category).order_by('?')[:100]
     return render(request, 'quizz/long.html', {'category': category, 'questions': questions})
 
-def submit_answer(request, category_id, time_category, question_id):
-    if request.method == 'POST':
-        selected_option_id = request.POST.get('selected_option')
-        question = Question.objects.get(id=question_id)
-        selected_option = question.answer_set.get(id=selected_option_id)
-        
-        if selected_option.is_correct:
-            # Retrieve or create the quiz progress for the user
-            quiz_progress, created = QuizProgress.objects.get_or_create(user=request.user, category=question.category, time_category=time_category)
-            quiz_progress.score += 1
-            quiz_progress.save()
-
-        return redirect('next_question', category_id=category_id, time_category=time_category, question_id=question_id)
-    
 def quiz_summary(request, category_id, time_category):
     category = Category.objects.get(id=category_id)
     time_category = TimeCategory.objects.get(name=time_category)
     total_questions = Question.objects.filter(category=category, time_category=time_category).count()
-    score = request.session.get('score', 0)
+    quiz_progress = QuizProgress.objects.get(user=request.user, category=category, time_category=time_category)
 
-    # Clear the session data to start a new quiz
-    request.session.flush()
-
-    # Render the template for quiz summary and pass the necessary context data
-    return render(request, 'quiz_summary.html', {'category': category, 'time_category': time_category, 'total_questions': total_questions, 'score': score})
-
-def quiz_view(request, category_id):
-    category = Category.objects.get(id=category_id)
-    questions = Question.objects.filter(category=category)
-    total_questions = questions.count()
+    score = quiz_progress.score
+    date_time = quiz_progress.finish_time
     
-    current_question_index = request.session.get('current_question_index', 0)
-    current_question = questions[current_question_index]
-    
+    return render(request, 'quizz/quiz_summary.html', {'category': category, 'time_category': time_category, 'total_questions': total_questions, 'score': score,  'date_time': date_time})
+
+def add_comment(request, category_id, question_id):
     if request.method == 'POST':
-        selected_answer = request.POST.get('selected_answer')
-        is_correct = (selected_answer == current_question.correct_answer)
-        # Save the user's answer or perform any other necessary actions
-        
-        # Update the current question index
-        current_question_index += 1
-        if current_question_index >= total_questions:
-            # User has completed all questions, redirect to a summary page or result page
-            return redirect('quiz_summary')
-        
-        # Save the updated current question index in session
-        request.session['current_question_index'] = current_question_index
-        return redirect('quiz_view', category_id=category_id)
-    
-    context = {
-        'category': category,
-        'current_question': current_question,
-        'total_questions': total_questions,
-        'current_question_index': current_question_index,
-    }
-    return render(request, 'quiz.html', context)
+        comment = request.POST.get('comment')
+        question = Question.objects.get(id=question_id)
+        category = Category.objects.get(id=category_id)
+
+        # Create a new Comment object and save it to the database
+        new_comment = Comment(user=request.user, question=question, content=comment)
+        new_comment.save()
+        #return redirect('question_details', category_id=category_id, question_id=question_id)
+    # Handle the case when the request method is not POST (e.g., GET request)
+    return HttpResponseNotAllowed(['POST'])
 
 def quiz(request):
     return render(request, 'quizz/quiz.html')

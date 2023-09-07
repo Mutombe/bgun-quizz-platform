@@ -44,6 +44,7 @@ class QuizProgress(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     time_category = models.ForeignKey(TimeCategory, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
+    finish_time = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return self.user

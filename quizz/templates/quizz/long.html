@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <h3>For long duration questions</h3>
+{% for question in questions %}
+    <h3>{{question}}</h3>
+{% empty %}
+    <h3>This time category has no questions uploaded yet</h3>
+{% endfor %}
 {% endblock %}
