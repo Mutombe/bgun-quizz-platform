@@ -17,13 +17,13 @@ class Category(models.Model):
 class Question(models.Model):
     image = models.ImageField(upload_to="static/files", blank=True)
     question_text = models.CharField(max_length=200, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="questions")
 
     def __str__(self):
         return self.question_text
     
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
     answer_text = models.CharField(max_length=200)
     is_correct = models.BooleanField(default=False)
 
@@ -41,10 +41,20 @@ class Comment(models.Model):
     
 class QuizProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    time_category = models.ForeignKey(TimeCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    answered_questions = models.ManyToManyField(Question)
     score = models.IntegerField(default=0)
-    finish_time = models.DateTimeField(null=True, blank=True)
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return self.user
+    
+class UserAnswer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    selected_answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    finish_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"User: {self.user.username}, Question: {self.question.question_text}, Selected Answer: {self.selected_answer.answer_text}"

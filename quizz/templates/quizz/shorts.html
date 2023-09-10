@@ -1,59 +1,148 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3>For short duration qestions</h3>
-
-
-<div class="container">
-    <h1>{{ category.name }}</h1>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
     
+    .quiz {
+        margin-bottom: 30px;
+    }
+    
+    .quiz-question {
+        font-weight: bold;
+    }
+    
+    .quiz-answer {
+        margin-bottom: 10px;
+    }
+    
+    .comments {
+        margin-top: 30px;
+    }
+    
+    .comment {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+    
+    #comment-input {
+        width: 100%;
+        resize: none;
+    }
+    
+    .comment-info {
+        margin-bottom: 5px;
+    }
+    
+    .comment-text {
+        font-size: 14px;
+    }
+
+    button.btn.btn-primary {
+        margin-top: 3px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
     <div class="row">
-        <div class="col-md-6">
-            <h3>Question {{ forloop.counter }}</h3>
-            {% for question in page_obj %}
-            <h3>{{ question.question_text }}</h3>
-            <img src="{{question.image.url}}" alt"question_image" height=300px width=300px>
-            <form action="" method="post">
-                {% csrf_token %}
-                {% for answer in question.answer_set.all %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="selected_option" value="{{ answer.id }}" id="option{{ answer.id }}">
-                        <label class="form-check-label" for="option{{ answer.id }}">{{ answer.answer_text }}</label>
-                    </div>
-                {% endfor %}
-                {% if not page_obj.has_next %}
-                    <a href="{% url 'quiz_summary' %}"><button type="submit" class="btn btn-primary mt-3">Quiz Summary</button></a>
-                {% else %}
-                    <a href="?page={{ page_obj.next_page_number }}"><button type="submit" class="btn btn-primary mt-3">Next</button></a>
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center">Short duration questions<strong>(10)</strong></h1>
+            <div class="quiz">
+                <h2 class="text-center">Question {{ page_obj.number }}</h2>
+                {% if messages %}
+                <div class="alert alert-danger">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
                 {% endif %}
-            </form>
-        </div>
-        
-        <div class="col-md-6">
-            <h3>Comments</h3>
-            
-            {% for comment in question.comment_set.all %}
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ comment.user.username }}</h5>
-                        <p class="card-text">{{ comment.content }}</p>
+                <hr>
+                {% if page_obj %}
+                <form method="post" action="{% url 'submit_answer' quiz_progress.id %}">
+                    <div class="quiz-question">
+                        {% csrf_token %}
+                        <p>{{ page_obj.object_list.0.question_text }}</p>
+                        <img src="{{ page_obj.object_list.0.image.url }}" alt="Question 1" width="350px" height="370px">
                     </div>
-                </div>
-            {% empty %}
-                <p>No comments yet.</p>
-            {% endfor %}
+                    {% for answer in page_obj.object_list.0.answers.all %}
+                        <div class="quiz-answer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="selected_answer" value="{{ answer.id }}" id="q1-a">
+                                <label class="form-check-label" for="q1-a">
+                                    {{ answer.answer_text }}
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% if page_obj.has_previous %}
+                        <input type="submit" class="btn btn-primary" name="previous" value="Previous">
+                    {% endif %}
             
-            <h3>Add a Comment</h3>
+                    {% if page_obj.has_next %}
+                        <input type="submit" class="btn btn-primary" name="next" value="Next">
+                    {% else %}
+                        <input type="submit" class="btn btn-primary" name="submit" value="Submit">
+                    {% endif %}
+                </form>
+                {% else %}
+                    <h3>No Questions Uploaded yet</h3>
+                {% endif %}
+            </div>
             
-            <form action="{#% url 'add_comment' category_id=category.id question_id=question.id %#}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="comment">Your Comment:</label>
-                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+            <div class="comments">
+                <h2>Comments</h2>
+                <div id="comment-section">
+                    <!-- Comments will be dynamically added here -->
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Comment</button>
-            </form>
+                
+                <form id="comment-form">
+                    <div class="form-group">
+                        <label for="comment-input">Add a comment:</label>
+                        <textarea class="form-control" id="comment-input" rows="4" placeholder="Enter your comment..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-{% endfor %}
+
+<!-- Add Bootstrap JS (Optional) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('comment-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var commentInput = document.getElementById('comment-input');
+        var commentText = commentInput.value.trim();
+        
+        if (commentText !== '') {
+            var comment = document.createElement('div');
+            comment.className = 'comment';
+            
+            var info = document.createElement('div');
+            info.className = 'comment-info';
+            info.textContent = 'Posted by User on ' + new Date().toLocaleString();
+            
+            var text = document.createElement('div');
+            text.className = 'comment-text';
+            text.textContent = commentText;
+            
+            comment.appendChild(info);
+            comment.appendChild(text);
+            
+            document.getElementById('comment-section').appendChild(comment);
+            
+            commentInput.value = '';
+        }
+    });
+</script>
+</body>
+</html>
 {% endblock %}

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
+from quizz.models import QuizProgress
 
 def register(request):
     if request.method == 'POST':
@@ -23,5 +24,6 @@ def logout_view(request):
     return redirect('login')
 
 def profile(request):
-    return render(request, 'profile/profile.html')
+    progress = QuizProgress.objects.filter(user=request.user).order_by('-end_time')
+    return render(request, 'profile/profile.html', {'progress': progress})
     
