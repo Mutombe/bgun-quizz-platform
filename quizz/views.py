@@ -1,3 +1,5 @@
+import re
+import random
 from .models import Category, Comment, UserAnswer, TimeCategory, QuizProgress, Question, Answer
 from django.http import HttpResponseNotAllowed
 from django.urls import reverse
@@ -7,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
-
+from django.http import HttpResponseRedirect
 
 def homepage(request):
     categories = Category.objects.all()
@@ -17,9 +19,10 @@ def category_detail(request, category_id):
     category = Category.objects.get(id=category_id)
     return render(request, "quizz/category_detail.html", {"category": category})
 
-@login_required
+@login_required(login_url="login")
 def short_category_questions(request, category_id):
     category = Category.objects.get(pk=category_id)
+    time_base = TimeCategory.objects.get(name='short')
     # Get the category and 10 random questions from a certain category
     questions = Question.objects.filter(category=category).order_by("?")[:10]
     # Create a new quiz progress object for the user and the category
@@ -27,47 +30,70 @@ def short_category_questions(request, category_id):
     paginator = Paginator(questions, 1)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    comments = Comment.objects.filter(question__in=page_obj.object_list).order_by('-created_at')
     quiz_progress = QuizProgress.objects.create(
-        user=request.user, category=category, start_time=timezone.now()
+        user=request.user, time_base=time_base, category=category, start_time=timezone.now()
     )
-    initial_score =  0
     return render(
         request,
         "quizz/shorts.html",
-        {"quiz_progress": quiz_progress, "questions": questions, "page_obj": page_obj, "initial_score": initial_score},
+        {"quiz_progress": quiz_progress, "questions": questions, "page_obj": page_obj, "comments": comments},
     )
 
+@login_required(login_url="login")
 def medium_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
+    time_base = TimeCategory.objects.get(name='medium')
     questions = Question.objects.filter(category=category).order_by("?")[:50]
     
     paginator = Paginator(questions, 1)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    comments = Comment.objects.filter(question__in=page_obj.object_list).order_by('-created_at')
     quiz_progress = QuizProgress.objects.create(
-        user=request.user, category=category, start_time=timezone.now()
+        user=request.user, time_base=time_base, category=category, start_time=timezone.now()
     )
     
     return render(
-        request, "quizz/medium.html", {"quiz_progress": quiz_progress, "questions": questions, "page_obj": page_obj, "category": category, "questions": questions}
+        request, "quizz/medium.html", {"quiz_progress": quiz_progress, "questions": questions, "page_obj": page_obj, "category": category, "comments": comments}
     )
 
-
+@login_required(login_url="login")
 def long_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
+    time_base = TimeCategory.objects.get(name='long')
     questions = Question.objects.filter(category=category).order_by("?")[:100]
     
     paginator = Paginator(questions, 1)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    comments = Comment.objects.filter(question__in=page_obj.object_list).order_by('-created_at')
     quiz_progress = QuizProgress.objects.create(
-        user=request.user, category=category, start_time=timezone.now()
+        user=request.user, time_base=time_base, category=category, start_time=timezone.now()
     )
     return render(
-        request, "quizz/long.html", {"quiz_progress": quiz_progress, "questions": questions, "page_obj": page_obj, "category": category, "questions": questions}
+        request, "quizz/long.html", {"quiz_progress": quiz_progress, "questions": questions, "page_obj": page_obj, "category": category, "comments": comments}
     )
 
+def random_quiz(request):
+    categories = Category.objects.all()
+    time_categories = TimeCategory.objects.all()
 
+    random_category = random.choice(categories)
+    random_time_category = random.choice(time_categories)
+
+    url = ""
+
+    if random_time_category.name == "short":
+        url = f"/category/{random_category.id}/"
+    elif random_time_category.name == "medium":
+        url = f"/category/{random_category.id}/"
+    elif random_time_category.name == "long":
+        url = f"/category/{random_category.id}/"
+
+    return redirect(url)
+
+@login_required(login_url="login")
 def submit_answer(request, quiz_progress_id):
     # Get the quiz progress from the request
     quiz_progress = QuizProgress.objects.get(pk=quiz_progress_id)
@@ -91,9 +117,14 @@ def submit_answer(request, quiz_progress_id):
         next_question = get_next_question(current_question, quiz_progress)
 
         # If there is a next question, redirect to it
-        if next_question and "next" in request.POST:
-            return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + "?page=2")
-
+        if next_question and "next_page" in request.POST:
+            #return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + "?page=2")
+            if quiz_progress.time_base.name == "short":
+                return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
+            elif quiz_progress.time_base.name == "medium":
+                return redirect(reverse("medium_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
+            elif quiz_progress.time_base.name == "long":
+                return redirect(reverse("long_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
         # Otherwise, save the end time of the quiz progress and redirect to the results page
         elif "submit" in request.POST or not next_question:
             quiz_progress.end_time = timezone.now()
@@ -104,7 +135,8 @@ def submit_answer(request, quiz_progress_id):
         # Handle the case when no answer is selected
         error_message = "Please select an answer."
         messages.error(request, error_message)
-        return redirect(request.META.get('HTTP_REFERER', 'short_category_questions'))
+        return redirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect("/")
     
 def get_next_question(current_question, quiz_progress):
     # Get all the questions from the same category as the current question
@@ -119,7 +151,7 @@ def get_next_question(current_question, quiz_progress):
 
     return next_question
 
-
+@login_required(login_url="login")
 def quiz_results(request, quiz_progress_id):
   # Get the quiz progress object by its id
   quiz_progress = QuizProgress.objects.get(pk=quiz_progress_id)
@@ -155,7 +187,7 @@ def quiz_results(request, quiz_progress_id):
   })
 
 
-def add_comment(request, category_id, question_id):
+def jadd_comment(request, category_id, question_id):
     if request.method == "POST":
         comment = request.POST.get("comment")
         question = Question.objects.get(id=question_id)
@@ -167,6 +199,16 @@ def add_comment(request, category_id, question_id):
         # return redirect('question_details', category_id=category_id, question_id=question_id)
     # Handle the case when the request method is not POST (e.g., GET request)
     return HttpResponseNotAllowed(["POST"])
+
+@login_required(login_url="login")
+def add_comment(request, pk):
+
+    question = Question.objects.get(pk=pk)
+  
+    comment = Comment(question=question, user=request.user, text=request.POST['text'])
+    comment.save()
+    redirect_url = request.META['HTTP_REFERER']
+    return redirect(redirect_url)
 
 
 def quiz(request):

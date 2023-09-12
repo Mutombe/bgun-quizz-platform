@@ -52,10 +52,31 @@
       </svg>
       <!-- <img src="https://newafricanmagazine.com/wordpress/wp-content/uploads/2023/03/Jenny-Web-1.png" alt="Profile Picture"> -->
       <h4>@{{request.user}}</h4>
-      <p><strong>Location:</strong> Nairobi, Kenya</p>
-      <p><strong>Email:</strong> john.doe@example.com</p>
+      {% if user.profile.location %}
+        <p><strong>Location:</strong> {{ user.profile.location }}</p>
+      {% else %}
+        <p><strong>Location:</strong> ********</p>
+      {% endif %}
+
+      {% if user.profile.email %}
+        <p><strong>Email:</strong>{{user.profile.email}}</p>
+      {% else %}
+        <p><strong>Email:</strong> *****@example.com</p>
+      {% endif %}
+
+      <hr>
+      {% if user.profile.interests.all %}
+      <p><strong>Interests:</strong></p>
+      <hr>
+      <ul>
+        {% for interest in user.profile.interests.all %}
+          <li>{{ interest }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
       <p><strong>Interests:</strong> African History, Wildlife, Culture</p>
-      <a href="#" class="btn btn-primary">Edit Profile</a>
+    {% endif %}
+      <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
     </div>
   </div>
 </body>

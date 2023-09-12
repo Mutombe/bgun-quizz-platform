@@ -31,7 +31,7 @@ class Answer(models.Model):
         return self.answer_text
 
 class Comment(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,6 +41,7 @@ class Comment(models.Model):
     
 class QuizProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time_base = models.ForeignKey(TimeCategory, on_delete=models.CASCADE, related_name='progress', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     answered_questions = models.ManyToManyField(Question)
     score = models.IntegerField(default=0)

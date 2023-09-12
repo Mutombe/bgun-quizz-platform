@@ -52,7 +52,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="text-center">Long duration qestions<strong>(100)</strong></h1>
+            <h1 class="text-center">Long duration questions<strong>(100)</strong></h1>
             <div class="quiz">
                 <h2 class="text-center">Question {{ page_obj.number }}</h2>
                 {% if messages %}
@@ -81,13 +81,13 @@
                         </div>
                     {% endfor %}
                     {% if page_obj.has_previous %}
-                        <input type="submit" name="previous" value="Previous">
+                        <input type="submit" class="btn btn-primary" name="previous" value="Previous">
                     {% endif %}
             
                     {% if page_obj.has_next %}
-                        <input type="submit" name="next" value="Next">
+                        <input type="submit" class="btn btn-primary" name="next_page" value="Next">
                     {% else %}
-                        <input type="submit" name="submit" value="Submit">
+                        <input type="submit" class="btn btn-primary" name="submit" value="Submit">
                     {% endif %}
                 </form>
                 {% else %}

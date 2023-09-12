@@ -3,7 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
+from authentication.forms import UserProfileForm
+from authentication.models import UserProfile
 from quizz.models import QuizProgress
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -23,7 +26,25 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url="login")
 def profile(request):
     progress = QuizProgress.objects.filter(user=request.user).order_by('-end_time')
     return render(request, 'profile/profile.html', {'progress': progress})
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    profile, created = UserProfile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=profile)
+    
+    return render(request, 'profile/edit_profile.html', {'form': form})
     

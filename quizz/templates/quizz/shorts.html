@@ -85,7 +85,7 @@
                     {% endif %}
             
                     {% if page_obj.has_next %}
-                        <input type="submit" class="btn btn-primary" name="next" value="Next">
+                        <input type="submit" class="btn btn-primary" name="next_page" value="Next">
                     {% else %}
                         <input type="submit" class="btn btn-primary" name="submit" value="Submit">
                     {% endif %}
@@ -101,10 +101,11 @@
                     <!-- Comments will be dynamically added here -->
                 </div>
                 
-                <form id="comment-form">
+                <form method="POST" action="{#% url 'add_comment' pk=pk %#}" id="comment-form">
+                    {% csrf_token %}
                     <div class="form-group">
-                        <label for="comment-input">Add a comment:</label>
-                        <textarea class="form-control" id="comment-input" rows="4" placeholder="Enter your comment..."></textarea>
+                        <label for="comment-input">You can add a comment:</label>
+                        <textarea class="form-control" id="comment-input" name="text" rows="4" placeholder="Enter your comment..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

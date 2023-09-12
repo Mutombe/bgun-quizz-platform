@@ -80,21 +80,21 @@
         <div class="category-card">
           <h5>Short <strong>(10)</strong></h5>
           <p>Quiz suitable for short breaks</p>
-          <a href="{% url 'short_category_questions' category.id %}?time=short" class="btn btn-primary btn-brown">Start Quiz</a>
+          <a href="{% url 'short_category_questions' category.id %}?time_base=short" class="btn btn-primary btn-brown">Start Quiz</a>
         </div>
       </div>
       <div class="col-md-4">
         <div class="category-card">
           <h5>Medium <strong>(50)</strong></h5>
           <p>Quiz suitable for moderate free time</p>
-          <a href="{% url 'medium_category_questions' category.id %}?time=medium" class="btn btn-primary btn-brown-dark">Start Quiz</a>
+          <a href="{% url 'medium_category_questions' category.id %}?time_base=medium" class="btn btn-primary btn-brown-dark">Start Quiz</a>
         </div>
       </div>
       <div class="col-md-4">
         <div class="category-card">
           <h5>Long <strong>(100)</strong></h5>
           <p>Quiz suitable for longer periods of free time</p>
-          <a href="{% url 'long_category_questions' category.id %}?time=long" class="btn btn-primary btn-brown-darker">Start Quiz</a>
+          <a href="{% url 'long_category_questions' category.id %}?time_base=long" class="btn btn-primary btn-brown-darker">Start Quiz</a>
         </div>
       </div>
     </div>
