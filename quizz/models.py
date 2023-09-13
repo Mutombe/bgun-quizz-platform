@@ -59,3 +59,15 @@ class UserAnswer(models.Model):
 
     def __str__(self):
         return f"User: {self.user.username}, Question: {self.question.question_text}, Selected Answer: {self.selected_answer.answer_text}"
+    
+class Books(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    cover = models.ImageField(upload_to="static/files", blank=False, null=True)
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100, null=True)
+    description = models.TextField()
+    category = models.ManyToManyField(Category)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title

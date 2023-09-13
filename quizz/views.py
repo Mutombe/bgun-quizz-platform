@@ -1,8 +1,8 @@
 import re
 import random
 
-from quizz.forms import CommentForm
-from .models import Category, Comment, UserAnswer, TimeCategory, QuizProgress, Question, Answer
+from quizz.forms import BooksForm, CommentForm
+from .models import Books, Category, Comment, UserAnswer, TimeCategory, QuizProgress, Question, Answer
 from django.http import HttpResponseNotAllowed
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -242,4 +242,33 @@ def add_comment(request, pk):
     return redirect(redirect_url)
 
 def books(request):
-    return render(request, "quizz/books.html")
+    books = Books.objects.all()
+    return render(request, "quizz/books.html", {'books':books})
+
+@login_required
+def edit_book(request):
+    user = request.user
+    book, created = Books.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        form = BooksForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('profile')
+    else:
+        form = BooksForm(instance=book)
+    
+    return render(request, 'quizz/edit_book.html', {'form': form})
+
+def book_add(request):
+    if request.method == "POST":
+        form = BooksForm(request.POST, request.FILES)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.save()
+            messages.success(request, "Book added successfully")
+            return redirect("dash")
+    else:
+        form = BooksForm()
+    return render(request, "quizz/book_add.html", {"form": form})

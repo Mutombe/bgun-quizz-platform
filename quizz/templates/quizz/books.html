@@ -1,5 +1,62 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-center">Opps. No books yet !</h1>
-<h3 class="text-center">Wanna add ?</h3>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Collection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles for the book list */
+        #book-list {
+            margin-top: 2rem;
+        }
+        
+        .card {
+            height: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    {% if books %}
+    <div class="container">
+        <h1>Book Collection</h1>
+        <div class="row" id="book-list">
+            <!-- Books will be statically added here -->
+            {% for book in books %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="{{book.cover}}" class="card-img-top" alt="Book 1">
+                    <div class="card-body">
+                        <h5 class="card-title">{{book.title}}</h5>
+                        <p class="card-text">{{book.author}}</p>
+                        <p class="card-text">{{book.description}}</p>
+                        {% for cat in book.category.all %}
+                        <p class="card-text"><strong>Category:</strong>{{ cat }}</p>
+                            {% if book.user is request.user %}
+                                <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Book</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <h1 class="text-center">Opps. No books yet !</h1>
+        
+    {% endif %}
+    <a href="{% url 'add_book' %}"><h3 class="text-center">Wanna add ?</h3><a>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
 {% endblock %}
