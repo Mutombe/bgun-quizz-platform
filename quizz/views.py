@@ -1,5 +1,7 @@
 import re
 import random
+
+from quizz.forms import CommentForm
 from .models import Category, Comment, UserAnswer, TimeCategory, QuizProgress, Question, Answer
 from django.http import HttpResponseNotAllowed
 from django.urls import reverse
@@ -116,6 +118,15 @@ def submit_answer(request, quiz_progress_id):
         # Get the next question from the same category that is not answered yet
         next_question = get_next_question(current_question, quiz_progress)
 
+        #if user is adding comments
+        if 'comment_form' in request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.question = current_question  # Assuming current_question is defined above
+                new_comment.user = request.user
+                new_comment.save()
+                
         # If there is a next question, redirect to it
         if next_question and "next_page" in request.POST:
             #return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + "?page=2")
@@ -200,16 +211,35 @@ def jadd_comment(request, category_id, question_id):
     # Handle the case when the request method is not POST (e.g., GET request)
     return HttpResponseNotAllowed(["POST"])
 
-@login_required(login_url="login")
-def add_comment(request, pk):
 
-    question = Question.objects.get(pk=pk)
-  
-    comment = Comment(question=question, user=request.user, text=request.POST['text'])
-    comment.save()
-    redirect_url = request.META['HTTP_REFERER']
+
+@login_required(login_url="login")
+def zadd_comment(request, pk):
+    if request.method == "POST":
+        question = Question.objects.get(pk=pk)
+        comment_text = request.POST.get("comment_form")
+        
+        if comment_text:
+            comment = Comment(question=question, user=request.user, comment_text=comment_text)
+            comment.save()
+    
+    redirect_url = request.META.get("HTTP_REFERER")
     return redirect(redirect_url)
 
+@login_required(login_url="login")
+def add_comment(request, pk):
+    if request.method == "POST":
+        question = Question.objects.get(pk=pk)
+        comment_form = CommentForm(request.POST)
+        
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.question = question
+            new_comment.user = request.user
+            new_comment.save()
+    
+    redirect_url = request.META.get("HTTP_REFERER")
+    return redirect(redirect_url)
 
-def quiz(request):
-    return render(request, "quizz/quiz.html")
+def books(request):
+    return render(request, "quizz/books.html")
