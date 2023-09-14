@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Answer, Category, Comment, UserAnswer, TimeCategory
+from .models import Books, Question, Answer, Category, Comment, UserAnswer, TimeCategory
 
 
 class AdminCategoriesOverview(admin.ModelAdmin):
@@ -38,11 +38,16 @@ class AdminProgressOverview(admin.ModelAdmin):
     ordering = ("user",)
     list_filter = ("question", )
     
-
-
+class AdminBooksOverview(admin.ModelAdmin):
+    list_display = ("user","title",)
+    search_fields = ("user",)
+    ordering = ("user",)
+    list_filter = ("title", )
+    
 admin.site.register(Category, AdminCategoriesOverview)
 admin.site.register(Question, AdminQuestionsOverview)
 admin.site.register(Answer, AdminAnswersOverview)
 admin.site.register(Comment, AdminCommentsOverview)
 admin.site.register(TimeCategory, AdminTimeOverview)
 admin.site.register(UserAnswer, AdminProgressOverview)
+admin.site.register(Books, AdminBooksOverview)

@@ -11,7 +11,7 @@ class BooksForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.pk:
-            self.fields['category'].initial = self.instance.interests.all()
+            self.fields['category'].initial = self.instance.category.all()
 
     class Meta:
         model = Books

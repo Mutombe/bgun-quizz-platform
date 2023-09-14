@@ -126,6 +126,7 @@ def submit_answer(request, quiz_progress_id):
                 new_comment.question = current_question  # Assuming current_question is defined above
                 new_comment.user = request.user
                 new_comment.save()
+            return redirect("long_category_questions", category_id=quiz_progress.category.id)
                 
         # If there is a next question, redirect to it
         if next_question and "next_page" in request.POST:
@@ -211,8 +212,6 @@ def jadd_comment(request, category_id, question_id):
     # Handle the case when the request method is not POST (e.g., GET request)
     return HttpResponseNotAllowed(["POST"])
 
-
-
 @login_required(login_url="login")
 def zadd_comment(request, pk):
     if request.method == "POST":
@@ -245,45 +244,33 @@ def books(request):
     books = Books.objects.all()
     return render(request, "quizz/books.html", {'books':books})
 
-@login_required
-def edit_book(request, book_id):
-    book = get_object_or_404(Books, id=book_id, user=request.user)
 
+def add_book(request):
     if request.method == 'POST':
-        form = BooksForm(request.POST, request.FILES, instance=book)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Book updated successfully.')
-            return redirect('books')
-    else:
-        form = BooksForm(instance=book)
-
-    return render(request, 'quizz/edit_book.html', {'form': form})
-
-def gbook_add(request):
-    if request.method == "POST":
-        form = BooksForm(request.POST, request.FILES)
-        if form.is_valid():
-            book = form.save(commit=True)
-            book.save()
-            messages.success(request, "Book added successfully")
-            return redirect("books")
-    else:
-        form = BooksForm()
-    return render(request, "quizz/book_add.html", {"form": form})
-
-def book_add(request):
-    if request.method == "POST":
         form = BooksForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save(commit=False)
             book.user = request.user
-            if 'cover' in request.FILES:
-                book.cover = request.FILES['cover']
             book.save()
-            form.save_m2m()
-            messages.success(request, "Book added successfully")
-            return redirect("books")
+            return redirect('books')
     else:
         form = BooksForm()
-    return render(request, "quizz/book_add.html", {"form": form})
+    return render(request, 'quizz/book_add.html', {'form': form})
+
+def edit_book(request, book_id):
+    book = Books.objects.get(id=book_id)
+    if request.method == 'POST':
+        form = BooksForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.user = request.user  # Set the user
+            book.save()
+            return redirect('books')
+    else:
+        form = BooksForm(instance=book)
+    return render(request, 'quizz/edit_book.html', {'form': form, 'book': book})
+
+def remove_book(request, book_id):
+    book = Books.objects.get(id=book_id)
+    book.delete()
+    return redirect('books')
