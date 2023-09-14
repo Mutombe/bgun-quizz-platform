@@ -62,7 +62,7 @@ class UserAnswer(models.Model):
     
 class Books(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cover = models.ImageField(upload_to="static/files", blank=False, null=True)
+    cover = models.ImageField(upload_to="static/files", blank=False, default=None)
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100, null=True)
     description = models.TextField()

@@ -97,6 +97,7 @@
             
             <div class="comments">
                 <h2>Comments</h2>
+                {% if page_obj %}
                 <div id="comment-section">
                     {% for comment in page_obj.object_list.0.comments.all %}
                     <div class="comment-info">
@@ -106,8 +107,12 @@
                         {{ comment.comment_text }}
                     </div>
                     {% endfor %}
+                {% else %}
+                    <p>No comments</p>
+                {% endif %}
                 </div>
                 
+                {% if page_obj %}
                 <form method="POST" action="{% url 'add_comment' pk=page_obj.object_list.0.id %}" id="comment-form">
                     {% csrf_token %}
                     <div class="form-group">
@@ -116,6 +121,7 @@
                     </div>
                     <button type="submit" name="comment_form" class="btn btn-primary">Submit</button>
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>

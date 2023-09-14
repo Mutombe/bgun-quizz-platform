@@ -28,6 +28,9 @@
     {% if books %}
     <div class="container">
         <h1>Book Collection</h1>
+        {% for message in messages %}
+            <p id="messages">{{message}}</p>
+        {% endfor %}
         <div class="row" id="book-list">
             <!-- Books will be statically added here -->
             {% for book in books %}

@@ -1,6 +1,5 @@
 import re
 import random
-
 from quizz.forms import BooksForm, CommentForm
 from .models import Books, Category, Comment, UserAnswer, TimeCategory, QuizProgress, Question, Answer
 from django.http import HttpResponseNotAllowed
@@ -12,6 +11,7 @@ from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 
 def homepage(request):
     categories = Category.objects.all()
@@ -246,29 +246,44 @@ def books(request):
     return render(request, "quizz/books.html", {'books':books})
 
 @login_required
-def edit_book(request):
-    user = request.user
-    book, created = Books.objects.get_or_create(user=user)
+def edit_book(request, book_id):
+    book = get_object_or_404(Books, id=book_id, user=request.user)
 
     if request.method == 'POST':
         form = BooksForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profile updated successfully.')
-            return redirect('profile')
+            messages.success(request, 'Book updated successfully.')
+            return redirect('books')
     else:
         form = BooksForm(instance=book)
-    
+
     return render(request, 'quizz/edit_book.html', {'form': form})
+
+def gbook_add(request):
+    if request.method == "POST":
+        form = BooksForm(request.POST, request.FILES)
+        if form.is_valid():
+            book = form.save(commit=True)
+            book.save()
+            messages.success(request, "Book added successfully")
+            return redirect("books")
+    else:
+        form = BooksForm()
+    return render(request, "quizz/book_add.html", {"form": form})
 
 def book_add(request):
     if request.method == "POST":
         form = BooksForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save(commit=False)
+            book.user = request.user
+            if 'cover' in request.FILES:
+                book.cover = request.FILES['cover']
             book.save()
+            form.save_m2m()
             messages.success(request, "Book added successfully")
-            return redirect("dash")
+            return redirect("books")
     else:
         form = BooksForm()
     return render(request, "quizz/book_add.html", {"form": form})

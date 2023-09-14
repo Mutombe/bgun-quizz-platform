@@ -8,7 +8,6 @@ class CommentForm(forms.ModelForm):
         
 class BooksForm(forms.ModelForm):
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple)
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.pk:
