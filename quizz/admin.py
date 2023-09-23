@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Books, Question, Answer, Category, Comment, UserAnswer, TimeCategory
+from .models import Books, Question, Answer, Category, Comment, TimeCategory
 
 
 class AdminCategoriesOverview(admin.ModelAdmin):
@@ -49,5 +49,4 @@ admin.site.register(Question, AdminQuestionsOverview)
 admin.site.register(Answer, AdminAnswersOverview)
 admin.site.register(Comment, AdminCommentsOverview)
 admin.site.register(TimeCategory, AdminTimeOverview)
-admin.site.register(UserAnswer, AdminProgressOverview)
 admin.site.register(Books, AdminBooksOverview)

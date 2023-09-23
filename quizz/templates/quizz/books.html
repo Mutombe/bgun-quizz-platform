@@ -60,37 +60,37 @@
         <div class="container">
             <span><h1>Our African Books Collection  <a class="add" href="{% url 'add_book' %}"><button type="button" class="btn btn-sm btn-outline-primary">Wanna add ?</button><a></h1></span>    
 
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="row m-3">
-                        {% for book in books %}
-                        <div class="col-md-5">
-                            <div class="card my-2">
-                                    <img class="card-img-top fit-image" src="{{ book.cover.url }}" alt="Card image cap">
-                                <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
-                                    <h5 class="card-title"><strong>{{book.title}}</strong></h5>
-                                    <h5 class="card-title">{{book.author}}</h5>
-                                    <p class="card-text">{{book.description}}</p>
-                                    {% for x in book.category.all %}
-                                        <p class="card-text"><strong>Category:</strong>{{x.name}}</p>
-                                    {% endfor %}
-                                </div>
-                                <div class="btn-group">
-                                    {% if book.user == request.user %}
-                                        <a href="{% url 'edit_book' book.id %}">
-                                            <button type="button" class="btn btn-sm btn-outline-primary">Edit</button>
-                                        </a>
-                                        <a href="{% url 'remove_book' book.id %}">
-                                            <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            </div> 
+                <div class="row">
+                    {% for book in books %}
+                    <div class="col-md-3">
+                        <div class="card my-2">
+                            <img class="card-img-top fit-image" src="{{ book.cover.url }}" alt="Card image cap" style="height: 285px; width: 305px">
+                            <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
+                                <h5 class="card-title"><strong>{{ book.title }}</strong></h5>
+                                <h5 class="card-title">{{ book.author }}</h5>
+                                <p class="card-text">{{ book.description }}</p>
+                                {% for x in book.category.all %}
+                                <p class="card-text"><strong>Category:</strong>{{ x.name }}</p>
+                                {% endfor %}
+                            </div>
+                            <div class="btn-group">
+                                {% if book.user == request.user %}
+                                <a href="{% url 'edit_book' book.id %}">
+                                    <button type="button" class="btn btn-sm btn-outline-primary">Edit</button>
+                                </a>
+                                <a href="{% url 'remove_book' book.id %}">
+                                    <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </a>
+                                {% endif %}
+                            </div>
                         </div>
-                        {% endfor %}
                     </div>
+                    {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                    </div>
+                    <div class="row">
+                    {% endif %}
+                    {% endfor %}
                 </div>
-            </div>
         </div>
     </body>
     <br>

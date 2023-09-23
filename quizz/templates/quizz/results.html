@@ -1,16 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<body>
+<style>
+  body {
+    background-color: #cfa7ae;
+}
+
+.row.text-center {
+  background: aliceblue;
+  border-radius: 23px;
+}
+
+strong.correct {
+  color: #4caf50;
+}
+</style>
     <div class="container">
       <div class="row">
         <div class="col-md-6 offset-md-3 text-center">
           <h1>Quiz Result</h1>
           <hr>
-          <h4>Category: {{ category }}</h4>
-          <h4>Score: {{ score }}</h4>
-          <h4>Percentage: {{ percentage_score }}</h4>
-          <h4>Total Questions: {{ total_questions }}</h4>
-          <h4>Time Taken: {{ time_taken }}</h4>
+          <h4>Category: <strong>{{ category }}</strong></h4>
+          <h4>Time Category: <strong>{{ time_base }}</strong></h4>
+          <h4>Score: <strong>{{ score }}</strong></h4>
+          <h4>Percentage: <strong>{{ percentage_score }}</strong></h4>
+          <h4>Total Questions: <strong>{{ total_questions }}</strong></h4>
+          <h4>Time Taken: <strong>{{ time_taken }}</strong></h4>
           <hr>
           {% if percentage_score_first > 70 %}
             <div>
@@ -27,5 +41,29 @@
           {% endif %}
         </div>
       </div>
+
+<hr>
+      <div class="row text-center">
+          <div class="col-md-8 offset-md-2">
+            <br>
+            <h1>Quiz Answers <a class="add" href="{% url 'books' %}"><button type="button" class="btn btn-sm btn-outline-primary">Book Collection</button><a></h1>
+              <!-- Replace the following code with a loop to display each question -->
+            <br>
+              {% for i in questions %}
+              <div class="question">
+                  <h4>Question {{ forloop.counter }}:</h4>
+                  <p>{{i.question_text}}</p>
+                  <img src="{{i.image.url}}" alt="Question 1 Image" height=300px width=300px>
+                  {% for answer in i.answers.all %}
+                    {% if answer.is_correct %}
+                      <p id="correct"><strong class="correct">Correct Answer:</strong> {{ answer.answer_text }}</p>
+                    {% endif %}
+                  {% endfor %}
+              </div>
+              {% endfor %}
+              <!-- End of loop -->
+          </div>
+      </div>
+      
     </div>
 {% endblock  %}

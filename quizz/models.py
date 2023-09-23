@@ -44,6 +44,7 @@ class QuizProgress(models.Model):
     time_base = models.ForeignKey(TimeCategory, on_delete=models.CASCADE, related_name='progress', null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     answered_questions = models.ManyToManyField(Question)
+    answered_order = models.PositiveIntegerField(default=0)
     score = models.IntegerField(default=0)
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)

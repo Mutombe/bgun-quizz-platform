@@ -113,7 +113,7 @@
                     </div>
                 
                 {% if page_obj %}
-                    <form method="POST" action="{% url 'add_comment' pk=page_obj.object_list.0.id %}" id="comment-form">
+                    <form method="POST" action="{% url 'add_comment' pk=question.pk %}" id="comment-form">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="comment-input">You can add a comment:</label>

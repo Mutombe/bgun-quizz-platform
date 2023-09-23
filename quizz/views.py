@@ -24,7 +24,7 @@ def category_detail(request, category_id):
 @login_required(login_url="login")
 def short_category_questions(request, category_id):
     category = Category.objects.get(pk=category_id)
-    time_base = TimeCategory.objects.get(name='short')
+    time_base = TimeCategory.objects.get(name='Short')
     # Get the category and 10 random questions from a certain category
     questions = Question.objects.filter(category=category).order_by("?")[:10]
     # Create a new quiz progress object for the user and the category
@@ -45,7 +45,7 @@ def short_category_questions(request, category_id):
 @login_required(login_url="login")
 def medium_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
-    time_base = TimeCategory.objects.get(name='medium')
+    time_base = TimeCategory.objects.get(name='Medium')
     questions = Question.objects.filter(category=category).order_by("?")[:50]
     
     paginator = Paginator(questions, 1)
@@ -63,7 +63,7 @@ def medium_category_questions(request, category_id):
 @login_required(login_url="login")
 def long_category_questions(request, category_id):
     category = Category.objects.get(id=category_id)
-    time_base = TimeCategory.objects.get(name='long')
+    time_base = TimeCategory.objects.get(name='Long')
     questions = Question.objects.filter(category=category).order_by("?")[:100]
     
     paginator = Paginator(questions, 1)
@@ -86,11 +86,11 @@ def random_quiz(request):
 
     url = ""
 
-    if random_time_category.name == "short":
+    if random_time_category.name == "Short":
         url = f"/category/{random_category.id}/"
-    elif random_time_category.name == "medium":
+    elif random_time_category.name == "Medium":
         url = f"/category/{random_category.id}/"
-    elif random_time_category.name == "long":
+    elif random_time_category.name == "Long":
         url = f"/category/{random_category.id}/"
 
     return redirect(url)
@@ -108,9 +108,6 @@ def submit_answer(request, quiz_progress_id):
         # Update the score and the answered questions of the quiz progress
         if selected_answer.is_correct:
             quiz_progress.score += 1
-        else:
-            if "previous" in request.POST and selected_answer.question in quiz_progress.answered_questions.all():
-                quiz_progress.score -= 1
 
         current_question = selected_answer.question
         quiz_progress.answered_questions.add(current_question)
@@ -118,26 +115,16 @@ def submit_answer(request, quiz_progress_id):
         # Get the next question from the same category that is not answered yet
         next_question = get_next_question(current_question, quiz_progress)
 
-        #if user is adding comments
-        if 'comment_form' in request.POST:
-            comment_form = CommentForm(request.POST)
-            if comment_form.is_valid():
-                new_comment = comment_form.save(commit=False)
-                new_comment.question = current_question  # Assuming current_question is defined above
-                new_comment.user = request.user
-                new_comment.save()
-            return redirect("long_category_questions", category_id=quiz_progress.category.id)
-                
         # If there is a next question, redirect to it
         if next_question and "next_page" in request.POST:
-            #return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + "?page=2")
-            if quiz_progress.time_base.name == "short":
-                return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
-            elif quiz_progress.time_base.name == "medium":
-                return redirect(reverse("medium_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
-            elif quiz_progress.time_base.name == "long":
-                return redirect(reverse("long_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
-        # Otherwise, save the end time of the quiz progress and redirect to the results page
+            if next_question != current_question:
+                if quiz_progress.time_base.name == "Short":
+                    return redirect(reverse("short_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
+                elif quiz_progress.time_base.name == "Medium":
+                    return redirect(reverse("medium_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
+                elif quiz_progress.time_base.name == "Long":
+                    return redirect(reverse("long_category_questions", kwargs={"category_id": quiz_progress.category.id}) + f"?page={next_question.id}")
+            # Otherwise, save the end time of the quiz progress and redirect to the results page
         elif "submit" in request.POST or not next_question:
             quiz_progress.end_time = timezone.now()
             quiz_progress.save()
@@ -165,83 +152,60 @@ def get_next_question(current_question, quiz_progress):
 
 @login_required(login_url="login")
 def quiz_results(request, quiz_progress_id):
-  # Get the quiz progress object by its id
-  quiz_progress = QuizProgress.objects.get(pk=quiz_progress_id)
-
-  # Get the total number of questions in the quiz
-  total_questions = quiz_progress.answered_questions.count()
-  category = quiz_progress.category
-  # Get the score and the time taken by the user
-  score = quiz_progress.score
-  time_taken = quiz_progress.end_time - quiz_progress.start_time
-
-  # Calculate the percentage score and format it as a string
-  percentage_score_first = (score / total_questions) * 100
-  percentage_score = f"{percentage_score_first:.2f}%"
-
-  # Get the list of questions and answers from the quiz progress object
-  questions = quiz_progress.answered_questions.all()
+    # Get the quiz progress object by its id
+    quiz_progress = QuizProgress.objects.get(pk=quiz_progress_id)
 
 
-  # Zip the questions and answers together and convert them to a list
-  combined = list(zip(questions))
+    # Get the total number of questions in the quiz
+    total_questions = quiz_progress.answered_questions.count()
+    category = quiz_progress.category
+    # Get the score and the time taken by the user
+    time_base = quiz_progress.time_base
+    score = quiz_progress.score
+    time_taken = quiz_progress.end_time - quiz_progress.start_time
 
-  # Render the results template with the context variables
-  return render(request, 'quizz/results.html', {
-    'quiz_progress': quiz_progress,
-    'total_questions': total_questions,
-    'score': score,
-    'category': category,
-    'time_taken': time_taken,
-    'percentage_score': percentage_score,
-    'percentage_score_first': percentage_score_first,
-    'combined': combined
-  })
+    # Calculate the percentage score and format it as a string
+    percentage_score_first = (score / total_questions) * 100
+    percentage_score = f"{percentage_score_first:.2f}%"
+
+    # Get the list of questions and answers from the quiz progress object
+    questions = quiz_progress.answered_questions.all()
 
 
-def jadd_comment(request, category_id, question_id):
-    if request.method == "POST":
-        comment = request.POST.get("comment")
-        question = Question.objects.get(id=question_id)
-        category = Category.objects.get(id=category_id)
+    # Zip the questions and answers together and convert them to a list
+    combined = list(zip(questions))
 
-        # Create a new Comment object and save it to the database
-        new_comment = Comment(user=request.user, question=question, content=comment)
-        new_comment.save()
-        # return redirect('question_details', category_id=category_id, question_id=question_id)
-    # Handle the case when the request method is not POST (e.g., GET request)
-    return HttpResponseNotAllowed(["POST"])
+    # Render the results template with the context variables
+    return render(request, 'quizz/results.html', {
+        'quiz_progress': quiz_progress,
+        'total_questions': total_questions,
+        'score': score,
+        'time_base': time_base,
+        'questions': questions,
+        'category': category,
+        'time_taken': time_taken,
+        'percentage_score': percentage_score,
+        'percentage_score_first': percentage_score_first,
+        'combined': combined
+    })
 
-@login_required(login_url="login")
-def zadd_comment(request, pk):
-    if request.method == "POST":
-        question = Question.objects.get(pk=pk)
-        comment_text = request.POST.get("comment_form")
-        
-        if comment_text:
-            comment = Comment(question=question, user=request.user, comment_text=comment_text)
-            comment.save()
-    
-    redirect_url = request.META.get("HTTP_REFERER")
-    return redirect(redirect_url)
 
 @login_required(login_url="login")
 def add_comment(request, pk):
     if request.method == "POST":
-        question = Question.objects.get(pk=pk)
-        comment_form = CommentForm(request.POST)
+        question = get_object_or_404(Question, pk=pk)
+        comment_text = request.POST.get("comment_form")
         
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.question = question
-            new_comment.user = request.user
-            new_comment.save()
+    
+        comment = Comment(question=question, user=request.user, comment_text=comment_text)
+        comment.save()
     
     redirect_url = request.META.get("HTTP_REFERER")
     return redirect(redirect_url)
 
+
 def books(request):
-    books = Books.objects.all()
+    books = Books.objects.all().order_by('uploaded_at')
     return render(request, "quizz/books.html", {'books':books})
 
 
