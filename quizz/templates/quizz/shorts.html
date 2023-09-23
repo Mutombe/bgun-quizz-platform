@@ -113,11 +113,11 @@
                 </div>
                 
                 {% if page_obj %}
-                <form method="POST" action="{% url 'add_comment' pk=question.pk %}" id="comment-form">
+                <form method="POST" action="{% url 'add_comment' page_obj.object_list.0.id %}" id="comment-form">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="comment-input">You can add a comment:</label>
-                        <textarea class="form-control" id="comment-input" name="comment_text" rows="4" placeholder="Enter your comment..."></textarea>
+                        <textarea class="form-control" id="comment-input" name="comment" rows="4" placeholder="Enter your comment..."></textarea>
                     </div>
                     <button type="submit" name="comment_form" class="btn btn-primary">Submit</button>
                 </form>

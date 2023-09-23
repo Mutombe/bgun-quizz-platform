@@ -189,20 +189,15 @@ def quiz_results(request, quiz_progress_id):
         'combined': combined
     })
 
-
-@login_required(login_url="login")
-def add_comment(request, pk):
+def add_comment(request, question_id):
     if request.method == "POST":
-        question = get_object_or_404(Question, pk=pk)
-        comment_text = request.POST.get("comment_form")
-        
-    
+        question = Question.objects.get(id=question_id)
+        comment_text = request.POST.get("comment")
         comment = Comment(question=question, user=request.user, comment_text=comment_text)
         comment.save()
     
-    redirect_url = request.META.get("HTTP_REFERER")
+    redirect_url = reverse('add_comment', args=[question_id])
     return redirect(redirect_url)
-
 
 def books(request):
     books = Books.objects.all().order_by('uploaded_at')
