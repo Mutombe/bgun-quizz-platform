@@ -1,4 +1,3 @@
-import re
 import random
 from quizz.forms import BooksForm, CommentForm
 from .models import Books, Category, Comment, UserAnswer, TimeCategory, QuizProgress, Question, Answer
@@ -233,3 +232,28 @@ def remove_book(request, book_id):
     book = Books.objects.get(id=book_id)
     book.delete()
     return redirect('books')
+
+
+
+def search(request):
+    query = request.GET.get('query')
+    results = {
+        'categories': [],
+        'questions': [],
+        'books': []
+    }
+
+    # Search in QuestionCategory model
+    categories = Category.objects.filter(name__icontains=query)
+    results['categories'] = categories
+
+    # Search in Question model
+    questions = Question.objects.filter(question_text__icontains=query)
+    results['questions'] = questions
+
+    # Search in Book model
+    books = Books.objects.filter(title__icontains=query)
+    results['books'] = books
+
+    context = {'results': results}
+    return render(request, 'quizz/search.html', context)

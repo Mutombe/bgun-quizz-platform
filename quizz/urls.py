@@ -15,5 +15,5 @@ urlpatterns = [
     path('add_comment/<int:question_id>/', views.add_comment, name='add_comment'),
     path('submit_answer/<int:quiz_progress_id>/', views.submit_answer, name='submit_answer'),
     path('quiz_results/<int:quiz_progress_id>/', views.quiz_results, name='quiz_results'),
-    
+    path('search/', views.search, name='search'),
 ]
