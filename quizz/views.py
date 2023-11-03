@@ -5,12 +5,11 @@ from django.http import HttpResponseNotAllowed
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404, render, redirect
 
 def homepage(request):
     categories = Category.objects.all()
@@ -188,6 +187,14 @@ def quiz_results(request, quiz_progress_id):
         'combined': combined
     })
 
+
+def question_details(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    context = {
+        'question': question
+    }
+    return render(request, 'quizz/question_details.html', context)
+
 def add_comment(request, question_id):
     if request.method == "POST":
         question = Question.objects.get(id=question_id)
@@ -243,7 +250,7 @@ def search(request):
         'books': []
     }
 
-    # Search in QuestionCategory model
+    # Search in Question Category model
     categories = Category.objects.filter(name__icontains=query)
     results['categories'] = categories
 

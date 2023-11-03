@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    img.img-fluid.rounded {
+        height: 300px;
+    }
+</style>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title">{{ question.question_text }}</h1>
+      <hr>
+      
+      {% if question.image %}
+      <div class="text-center mb-4">
+        <img src="{{ question.image.url }}" alt="Question Image" class="img-fluid rounded">
+      </div>
+      {% endif %}
+      
+      <div class="row">
+        <div class="col-md-6">
+          <p class="card-text"><strong>Category:</strong> {{ question.category.name }}</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{#% url 'quiz_sessions' question.category.id %#}" class="btn btn-primary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

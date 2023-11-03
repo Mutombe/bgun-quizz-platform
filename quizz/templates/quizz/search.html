@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
   <h1>Search Results</h1>
-
+<hr>
   <!-- Categories -->
   {% if results.categories %}
   <h2>Categories</h2>
@@ -14,8 +14,9 @@
         <div class="card-body">
           <h5 class="card-title">{{ category.name }}</h5>
           <!-- Add more category-related information here -->
-          <a href="{% url 'category_details' category.id %}" class="btn btn-primary">View Details</a> <!-- Replace 'category_details' with the appropriate URL name for your category details view -->
-          <a href="{% url 'quiz_sessions' category.id %}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+          <a href="{% url 'category_detail' category.id %}" class="btn btn-primary">View Details</a> <!-- Replace 'category_details' with the appropriate URL name for your category details view -->
+          <br>
+          <a href="{#% url 'quiz_sessions' category.id %#}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
         </div>
       </div>
     </div>
@@ -34,7 +35,7 @@
           <h5 class="card-title">{{ question.question_text }}</h5>
           <!-- Add more question-related information here -->
           <a href="{% url 'question_details' question.id %}" class="btn btn-primary">View Details</a> <!-- Replace 'question_details' with the appropriate URL name for your question details view -->
-          <a href="{% url 'quiz_sessions' question.category.id %}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+          <a href="{#% url 'quiz_sessions' question.category.id %#}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
         </div>
       </div>
     </div>
@@ -52,8 +53,8 @@
         <div class="card-body">
           <h5 class="card-title">{{ book.title }}</h5>
           <!-- Add more book-related information here -->
-          <a href="{% url 'book_details' book.id %}" class="btn btn-primary">View Details</a> <!-- Replace 'book_details' with the appropriate URL name for your book details view -->
-          <a href="{% url 'quiz_sessions' book.category.id %}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+          <a href="{% url 'books' %}" class="btn btn-primary">View Details</a> <!-- Replace 'book_details' with the appropriate URL name for your book details view -->
+          <a href="{% url 'add_book' %}" class="btn btn-secondary">Add more</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
         </div>
       </div>
     </div>

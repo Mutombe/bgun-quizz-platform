@@ -8,6 +8,7 @@ urlpatterns = [
     path('books/remove/<int:book_id>/', views.remove_book, name='remove_book'),
     path('books/', views.books, name='books'),
     path('category/<int:category_id>/', views.category_detail, name='category_detail'),
+     path('question/<int:question_id>/', views.question_details, name='question_details'),
     path('category/<int:category_id>/short/', views.short_category_questions, name='short_category_questions'),
     path('category/<int:category_id>/medium/', views.medium_category_questions, name='medium_category_questions'),
     path('category/<int:category_id>/long/', views.long_category_questions, name='long_category_questions'),
