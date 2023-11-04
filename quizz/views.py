@@ -12,15 +12,18 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render, redirect
 
 def homepage(request):
+    """Homepage"""
     categories = Category.objects.all()
     return render(request, "quizz/home.html", {"categories": categories})
 
 def category_detail(request, category_id):
+    """Category details for question categories"""
     category = Category.objects.get(id=category_id)
     return render(request, "quizz/category_detail.html", {"category": category})
 
 @login_required(login_url="login")
 def short_category_questions(request, category_id):
+    """Short duration paginated question set"""
     category = Category.objects.get(pk=category_id)
     time_base = TimeCategory.objects.get(name='Short')
     # Get the category and 10 random questions from a certain category
@@ -42,6 +45,8 @@ def short_category_questions(request, category_id):
 
 @login_required(login_url="login")
 def medium_category_questions(request, category_id):
+    "Medium duration paginated question set"
+    
     category = Category.objects.get(id=category_id)
     time_base = TimeCategory.objects.get(name='Medium')
     questions = Question.objects.filter(category=category).order_by("?")[:50]
@@ -60,6 +65,7 @@ def medium_category_questions(request, category_id):
 
 @login_required(login_url="login")
 def long_category_questions(request, category_id):
+    "Long duration paginated question set"
     category = Category.objects.get(id=category_id)
     time_base = TimeCategory.objects.get(name='Long')
     questions = Question.objects.filter(category=category).order_by("?")[:100]
@@ -76,6 +82,7 @@ def long_category_questions(request, category_id):
     )
 
 def random_quiz(request):
+    """Randomly choose a question set in a randomly chosen question category"""
     categories = Category.objects.all()
     time_categories = TimeCategory.objects.all()
 
@@ -95,6 +102,7 @@ def random_quiz(request):
 
 @login_required(login_url="login")
 def submit_answer(request, quiz_progress_id):
+    """Main view for submission and validation of user selected answers"""
     # Get the quiz progress from the request
     quiz_progress = QuizProgress.objects.get(pk=quiz_progress_id)
 
@@ -136,6 +144,7 @@ def submit_answer(request, quiz_progress_id):
     return HttpResponseRedirect("/")
     
 def get_next_question(current_question, quiz_progress):
+    """Getting the next question in a one-page per question scenario"""
     # Get all the questions from the same category as the current question
     category_questions = current_question.category.questions.all()
     # Get the ids of the questions that are already answered by the user
@@ -150,6 +159,7 @@ def get_next_question(current_question, quiz_progress):
 
 @login_required(login_url="login")
 def quiz_results(request, quiz_progress_id):
+    """Get quizz results after the user is done with the last question"""
     # Get the quiz progress object by its id
     quiz_progress = QuizProgress.objects.get(pk=quiz_progress_id)
 
@@ -189,6 +199,7 @@ def quiz_results(request, quiz_progress_id):
 
 
 def question_details(request, question_id):
+    """Retrieve question details"""
     question = get_object_or_404(Question, id=question_id)
     context = {
         'question': question
@@ -196,6 +207,7 @@ def question_details(request, question_id):
     return render(request, 'quizz/question_details.html', context)
 
 def add_comment(request, question_id):
+    """Add comment to the currect question you're answering"""
     if request.method == "POST":
         question = Question.objects.get(id=question_id)
         comment_text = request.POST.get("comment")
@@ -206,11 +218,13 @@ def add_comment(request, question_id):
     return redirect(redirect_url)
 
 def books(request):
+    """Retrieve all questions from the database"""
     books = Books.objects.all().order_by('uploaded_at')
     return render(request, "quizz/books.html", {'books':books})
 
 
 def add_book(request):
+    """Add books to the database"""
     if request.method == 'POST':
         form = BooksForm(request.POST, request.FILES)
         if form.is_valid():
@@ -223,6 +237,7 @@ def add_book(request):
     return render(request, 'quizz/book_add.html', {'form': form})
 
 def edit_book(request, book_id):
+    """Edit books that you've added. Only the user that uploads the books has the access to editing them"""
     book = Books.objects.get(id=book_id)
     if request.method == 'POST':
         form = BooksForm(request.POST, request.FILES, instance=book)
@@ -236,6 +251,7 @@ def edit_book(request, book_id):
     return render(request, 'quizz/edit_book.html', {'form': form, 'book': book})
 
 def remove_book(request, book_id):
+    """Delete books that you've added. Only the user that uploads the books has the access to deleting them"""
     book = Books.objects.get(id=book_id)
     book.delete()
     return redirect('books')
@@ -243,6 +259,7 @@ def remove_book(request, book_id):
 
 
 def search(request):
+    """Seach anything you want on the site and get unlimited options to do what you want with it"""
     query = request.GET.get('query')
     results = {
         'categories': [],

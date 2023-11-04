@@ -9,6 +9,7 @@ from quizz.models import QuizProgress
 from django.contrib.auth.decorators import login_required
 
 def register(request):
+    """Register user account"""
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -23,17 +24,20 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 def logout_view(request):
+    """Login with user account"""
     logout(request)
     return redirect('login')
 
 @login_required(login_url="login")
 def profile(request):
+    """Render the profile for the user"""
     progress = QuizProgress.objects.filter(user=request.user).order_by('-end_time')
     return render(request, 'profile/profile.html', {'progress': progress})
 
 
 @login_required
 def edit_profile(request):
+    """Edit the profile for the user"""
     user = request.user
     profile, created = UserProfile.objects.get_or_create(user=user)
 

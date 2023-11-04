@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+  img {
+    margin-top: 10px;
+    border-radius: 10px;
+}
+</style>
 <div class="container mt-4">
   <h1>Search Results</h1>
 <hr>
@@ -13,10 +20,14 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{ category.name }}</h5>
-          <!-- Add more category-related information here -->
-          <a href="{% url 'category_detail' category.id %}" class="btn btn-primary">View Details</a> <!-- Replace 'category_details' with the appropriate URL name for your category details view -->
-          <br>
-          <a href="{#% url 'quiz_sessions' category.id %#}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+          <div>
+            <a href="{% url 'category_detail' category.id %}" class="btn btn-primary">View Details</a>
+              <br>
+            <a href="{#% url 'quiz_sessions' category.id %#}" class="btn btn-secondary">Quiz Sessions</a>
+          </div>
+          <div>
+              <img src="{{category.image.url}}" alt="Category Image" height=100px width=100px>
+          </div>
         </div>
       </div>
     </div>
@@ -34,8 +45,8 @@
         <div class="card-body">
           <h5 class="card-title">{{ question.question_text }}</h5>
           <!-- Add more question-related information here -->
-          <a href="{% url 'question_details' question.id %}" class="btn btn-primary">View Details</a> <!-- Replace 'question_details' with the appropriate URL name for your question details view -->
-          <a href="{#% url 'quiz_sessions' question.category.id %#}" class="btn btn-secondary">Quiz Sessions</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+          <a href="{% url 'question_details' question.id %}" class="btn btn-primary">View Details</a>
+          <a href="{#% url 'quiz_sessions' question.category.id %#}" class="btn btn-secondary">Quiz Sessions</a>
         </div>
       </div>
     </div>
@@ -53,8 +64,8 @@
         <div class="card-body">
           <h5 class="card-title">{{ book.title }}</h5>
           <!-- Add more book-related information here -->
-          <a href="{% url 'books' %}" class="btn btn-primary">View Details</a> <!-- Replace 'book_details' with the appropriate URL name for your book details view -->
-          <a href="{% url 'add_book' %}" class="btn btn-secondary">Add more</a> <!-- Replace 'quiz_sessions' with the appropriate URL name for your quiz sessions view -->
+          <a href="{% url 'books' %}" class="btn btn-primary">View Details</a>
+          <a href="{% url 'add_book' %}" class="btn btn-secondary">Add more</a>
         </div>
       </div>
     </div>
